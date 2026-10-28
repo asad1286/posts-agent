@@ -1,6 +1,7 @@
 """
-Daily Post Agent: roz Gemini se post likhwata hai, image banata hai,
-aur Instagram + LinkedIn pe post karta hai.
+Daily Post Agent: roz Gemini se Zephanto ki "Daily Tech Talk" post likhwata hai,
+usi series design mein image banata hai (render.py), aur Instagram + LinkedIn
+pe post karta hai.
   python agent.py generate   -> post + image banata hai
   python agent.py publish    -> Instagram aur LinkedIn pe post karta hai
 """
@@ -14,7 +15,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
-from PIL import Image, ImageDraw, ImageFont
+
+import render
 
 # =====================================================================
 #  ⚙️  SETTINGS — sirf ye hissa apni marzi se badlo
@@ -22,24 +24,39 @@ from PIL import Image, ImageDraw, ImageFont
 
 BRAND_NAME = "Zephanto"
 
-TOPIC = (
-    "Technology, AI tools aur software development ke practical tips, "
-    "jo small businesses aur young developers ke kaam aayen"
+SERVICES = (
+    "custom software, web and mobile apps, CRM setup and migration (HubSpot, "
+    "GoHighLevel, Zoho), workflow automation (Zapier, n8n, Make), AI integrations, "
+    "cloud and DevOps, UI/UX design, technical consulting"
 )
 
-AUDIENCE = "Pakistan aur duniya bhar ke young professionals, founders aur developers"
+AUDIENCE = "small and growing business owners, founders, agencies and operations teams"
 
-# "English", "Roman Urdu", ya "English with a little Roman Urdu"
-LANGUAGE = "English"
+TONE = "friendly, practical and confident, without hype"
 
-TONE = "friendly, helpful, confident — bina zyada hype ke"
+# Formats ek ke baad ek chalte hain: #12 myth_fact, #13 before_after, #14 quote, #15 myth_fact ...
+FORMAT_ROTATION = ["myth_fact", "before_after", "quote"]
+
+# history.json mein koi numbered post na ho to series yahan se shuru hogi
+START_DAY = 12
+
+# Jo posts pehle hath se ban chuki hain (Day 1-11): inhein dobara nahi likhna
+PAST_POSTS = [
+    "5 tasks your business should stop doing by hand",
+    "5 signs your CRM is leaking leads",
+    "GoodHire case study: a hiring platform for HR teams",
+    "5 signs your website is losing you customers",
+    "5 ways AI can save your team hours every week",
+    "5 questions to ask before hiring a software company",
+    "5 things to prepare before you build an app",
+    "5 ways to cut your cloud bill this month",
+    "Myth vs Fact: automation is only for big companies",
+    "Before / After: same lead, two very different outcomes (manual vs automated follow-up)",
+    "Quote: the best software doesn't add steps, it removes the ones nobody wanted to do",
+]
 
 POST_TO_INSTAGRAM = True
 POST_TO_LINKEDIN = True
-
-IMAGE_BG_COLOR = "#0B0B0F"
-IMAGE_ACCENT_COLOR = "#7C5CFF"
-IMAGE_TEXT_COLOR = "#FFFFFF"
 
 GEMINI_MODELS = ["gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash"]
 
@@ -68,48 +85,157 @@ def load_history():
     return []
 
 
-def build_prompt(history):
-    recent = [h["headline"] for h in history[-30:]]
-    recent_text = "\n".join(f"- {h}" for h in recent) or "- (none yet)"
+def next_day(history):
+    days = [h["day"] for h in history if isinstance(h.get("day"), int)]
+    return max(days) + 1 if days else START_DAY
+
+
+# What goes on the image for each format, with the limits that keep it inside its box
+FORMAT_FIELDS = {
+    "myth_fact": {
+        "myth": "the common belief, one short sentence, max 60 characters",
+        "fact": "the truth, specific and practical, max 130 characters",
+    },
+    "before_after": {
+        "headline_top": "short first line, max 22 characters, e.g. \"Same lead.\"",
+        "headline_bottom": "second line, max 32 characters, e.g. \"Two very different outcomes.\"",
+        "before": "list of exactly 4 short steps (max 40 characters each) showing the slow, manual way",
+        "after": "list of exactly 4 short steps (max 40 characters each) showing the same thing done well",
+    },
+    "quote": {
+        "lead": "first half of one strong original statement, max 45 characters",
+        "punch": "second half that lands the point, max 55 characters",
+    },
+}
+
+LIMITS = {"myth": 75, "fact": 160, "headline_top": 28, "headline_bottom": 40,
+          "lead": 55, "punch": 65, "question": 60}
+
+STYLE_EXAMPLES = """Example (Daily Tech Talk #09, myth_fact):
+
+instagram_caption:
+Daily Tech Talk #09: Myth vs Fact
+
+Myth: Automation is only for big companies. ❌
+Fact: Even a 3-person team can automate lead replies, follow-ups and reminders, often with tools it already pays for. ✅
+
+Most small businesses already have a CRM, a form and an email tool. Connecting them properly is usually the cheapest "new hire" they'll ever make.
+
+Which task would you automate first? Tell us in the comments 👇
+
+#Zephanto #DailyTechTalk #MythVsFact #Automation #SmallBusiness #CRM #Zapier #n8n #Productivity
+
+linkedin_post:
+"Automation is for big companies with big budgets."
+
+I hear this a lot, and it's rarely true.
+
+Most small teams already pay for the pieces: a CRM, a website form, an email tool, a calendar. What's missing is the connection between them.
+
+Connect those four, and a 3-person team can:
+→ reply to every new lead within seconds,
+→ follow up automatically until someone answers,
+→ remind customers about bookings without anyone typing a message.
+
+No new software. Just the tools you have, finally working together.
+
+Which task would you automate first?
+
+#Automation #SmallBusiness #CRM #Operations
+
+Example (Daily Tech Talk #11, quote):
+
+instagram_caption:
+Daily Tech Talk #11 💡
+
+The best software doesn't add steps. It removes the ones nobody wanted to do.
+
+Every tool we build starts with one question: what is your team doing by hand, every day, that they wish they didn't have to?
+
+Copying data. Chasing replies. Building the same report every Monday. That's where good software starts.
+
+Agree or disagree? Tell us in the comments 👇
+
+#Zephanto #DailyTechTalk #SoftwareDevelopment #Automation #Productivity #ProductDesign #SmallBusiness #TechQuotes"""
+
+
+def summary(post):
+    """One line describing the post, for history.json and the image's alt text."""
+    if post["format"] == "myth_fact":
+        return f"Myth vs Fact: {post['myth']}"
+    if post["format"] == "before_after":
+        return f"Before / After: {post['headline_top']} {post['headline_bottom']}"
+    return f"Quote: {post['lead']} {post['punch']}"
+
+
+def build_prompt(history, day, fmt):
+    done = PAST_POSTS + [h["headline"] for h in history[-40:]]
+    done_text = "\n".join(f"- {h}" for h in done)
+    fields = FORMAT_FIELDS[fmt]
+    field_text = "\n".join(f'- "{k}": {v}' for k, v in fields.items())
+    keys = ", ".join(f'"{k}": ...' for k in [*fields, "question", "instagram_caption", "linkedin_post"])
     today = datetime.now(timezone.utc).strftime("%A, %d %B %Y")
-    return f"""You are the social media writer for the brand "{BRAND_NAME}".
-Today is {today}.
+    return f"""You write the daily social media post for {BRAND_NAME}, a software company.
+Services: {SERVICES}.
+Audience: {AUDIENCE}.
+Tone: {TONE}. Language: English.
+Today is {today}. This is "Daily Tech Talk #{day:02d}", format: {fmt}.
 
-Write ONE new post idea for today and adapt it for Instagram and LinkedIn.
+Pick ONE fresh topic connected to one of the services. It must not repeat or closely
+rephrase any earlier post:
+{done_text}
 
-Topic area: {TOPIC}
-Audience: {AUDIENCE}
-Language: {LANGUAGE}
-Tone: {TONE}
+Text for the image:
+{field_text}
+- "question": a short question for the audience under the image, max 50 characters
 
-Do NOT repeat or closely rephrase any of these recent headlines:
-{recent_text}
+Captions:
+- "instagram_caption": first line starts with "Daily Tech Talk #{day:02d}". Then the post's idea in
+  short lines, 2-3 sentences of practical context, the question followed by
+  "Tell us in the comments 👇", a blank line, and 8-10 hashtags starting with
+  #Zephanto #DailyTechTalk. Max 4 emojis. Only if the topic is about CRM or
+  automation, you may add one line before the hashtags:
+  "Free 30-minute CRM & automation audit, link in bio."
+- "linkedin_post": no "Daily Tech Talk" label. A strong first line, short paragraphs,
+  one concrete takeaway, written by a practitioner, ends with the question, then 3-4
+  hashtags. 100-200 words. Max 1 emoji. No links.
 
 Rules:
-- Give real, specific, useful value (a tip, mini-framework, mistake to avoid, or quick how-to).
-- No made-up statistics, quotes, or claims about real people or companies.
-- No clickbait. Max 3 emojis on Instagram, max 2 on LinkedIn.
-- "headline" goes on the image: max 8 words, punchy.
-- "subline" also goes on the image: max 14 words.
-- "instagram_caption": 80-150 words, hook first line, short lines, end with a question, then a blank line and 5-8 hashtags.
-- "linkedin_post": 120-220 words, strong first line, short paragraphs, practical takeaway, end with a question, 2-3 hashtags at the end.
+- Specific and useful, not generic. No clickbait.
+- No made-up statistics, percentages, quotes, client names or claims about real people.
+- No numbered "5 tips" lists: that series is over.
+- Never mention the company's city or country.
+
+{STYLE_EXAMPLES}
 
 Return ONLY valid JSON with exactly these keys:
-{{"headline": "...", "subline": "...", "instagram_caption": "...", "linkedin_post": "..."}}
+{{{keys}}}
 """
 
 
-def parse_post_json(text):
+def parse_post_json(text, fmt):
     start, end = text.find("{"), text.rfind("}")
     data = json.loads(text[start:end + 1])
-    for key in ("headline", "subline", "instagram_caption", "linkedin_post"):
-        if not str(data.get(key, "")).strip():
-            raise ValueError(f"'{key}' khaali hai")
-        data[key] = str(data[key]).strip()
-    return data
+    post = {}
+    for key in [*FORMAT_FIELDS[fmt], "question", "instagram_caption", "linkedin_post"]:
+        value = data.get(key)
+        if key in ("before", "after"):
+            if not isinstance(value, list) or not 3 <= len(value) <= 4:
+                raise ValueError(f"'{key}' mein 3-4 items chahiye")
+            value = [str(v).strip() for v in value]
+            if any(not v or len(v) > 50 for v in value):
+                raise ValueError(f"'{key}' ke items khaali ya bohat lambe hain")
+        else:
+            value = str(value or "").strip()
+            if not value:
+                raise ValueError(f"'{key}' khaali hai")
+            if len(value) > LIMITS.get(key, 10_000):
+                raise ValueError(f"'{key}' bohat lamba hai ({len(value)} characters)")
+        post[key] = value
+    return post
 
 
-def ask_gemini(prompt):
+def ask_gemini(prompt, fmt):
     api_key = env("GEMINI_API_KEY")
     body = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -131,74 +257,13 @@ def ask_gemini(prompt):
                     continue
                 r.raise_for_status()
                 text = r.json()["candidates"][0]["content"]["parts"][0]["text"]
-                post = parse_post_json(text)
+                post = parse_post_json(text, fmt)
                 print(f"✍️  Post likhi gayi ({model})")
                 return post
             except (requests.RequestException, KeyError, ValueError) as e:
                 last_error = f"{model}: {e}"
                 time.sleep(5)
     sys.exit(f"❌ Gemini se post nahi bani. Aakhri error: {last_error}")
-
-
-FONTS_BOLD = ["/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-              "/System/Library/Fonts/Supplemental/Arial Bold.ttf"]
-FONTS_REG = ["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-             "/System/Library/Fonts/Supplemental/Arial.ttf"]
-
-
-def load_font(candidates, size):
-    for path in candidates:
-        if Path(path).exists():
-            return ImageFont.truetype(path, size)
-    return ImageFont.load_default(size=size)
-
-
-def wrap(draw, text, font, max_width):
-    lines, line = [], ""
-    for word in text.split():
-        test = f"{line} {word}".strip()
-        if draw.textlength(test, font=font) <= max_width:
-            line = test
-        else:
-            if line:
-                lines.append(line)
-            line = word
-    if line:
-        lines.append(line)
-    return lines
-
-
-def make_image(headline, subline, out_path):
-    W, H, pad = 1080, 1350, 96
-    img = Image.new("RGB", (W, H), IMAGE_BG_COLOR)
-    d = ImageDraw.Draw(img)
-    d.rectangle([pad, pad, pad + 120, pad + 14], fill=IMAGE_ACCENT_COLOR)
-    d.text((pad, pad + 44), BRAND_NAME.upper(), font=load_font(FONTS_BOLD, 40),
-           fill=IMAGE_ACCENT_COLOR)
-
-    max_w = W - 2 * pad
-    for size in range(112, 47, -4):
-        h_font = load_font(FONTS_BOLD, size)
-        h_lines = wrap(d, headline, h_font, max_w)
-        if len(h_lines) <= 5:
-            break
-    line_h = int(size * 1.15)
-    s_font = load_font(FONTS_REG, 44)
-    s_lines = wrap(d, subline, s_font, max_w)[:4]
-
-    y = max(pad + 180, (H - (len(h_lines) * line_h + 60 + len(s_lines) * 60)) // 2)
-    for ln in h_lines:
-        d.text((pad, y), ln, font=h_font, fill=IMAGE_TEXT_COLOR)
-        y += line_h
-    y += 60
-    for ln in s_lines:
-        d.text((pad, y), ln, font=s_font, fill="#B8B8C8")
-        y += 60
-
-    d.line([pad, H - pad - 60, W - pad, H - pad - 60], fill="#2A2A35", width=2)
-    d.text((pad, H - pad - 30), "Save this for later  →",
-           font=load_font(FONTS_REG, 32), fill="#8A8A9A")
-    img.save(out_path, "JPEG", quality=92)
 
 
 def post_instagram(image_url, caption):
@@ -243,8 +308,9 @@ def post_linkedin(image_path, text, alt_text):
         repo = env("GITHUB_REPOSITORY")
         branch = os.getenv("GITHUB_REF_NAME", "main")
         rel = Path(image_path).relative_to(ROOT).as_posix()
+        # Make passes the text to LinkedIn as-is, so it needs the same escaping
         r = requests.post(hook, timeout=60, json={
-            "text": text,
+            "text": linkedin_text(text),
             "image_url": f"https://raw.githubusercontent.com/{repo}/{branch}/{rel}",
             "alt_text": alt_text,
         })
@@ -296,13 +362,17 @@ def post_linkedin(image_path, text, alt_text):
 def cmd_generate():
     OUTPUT_DIR.mkdir(exist_ok=True)
     (ROOT / "images").mkdir(exist_ok=True)
-    post = ask_gemini(build_prompt(load_history()))
+    history = load_history()
+    day = next_day(history)
+    fmt = FORMAT_ROTATION[(day - START_DAY) % len(FORMAT_ROTATION)]
+    post = ask_gemini(build_prompt(history, day, fmt), fmt)
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    post["image"], post["date"] = f"images/{stamp}.jpg", stamp
-    make_image(post["headline"], post["subline"], ROOT / post["image"])
+    post.update(day=day, format=fmt, date=stamp, image=f"images/{stamp}.jpg")
+    post["headline"] = summary(post)
+    render.render(post, ROOT / post["image"])
     POST_FILE.write_text(json.dumps(post, ensure_ascii=False, indent=2), encoding="utf-8")
     print("\n" + "=" * 60)
-    print(f"HEADLINE: {post['headline']}\n" + "-" * 60)
+    print(f"DAILY TECH TALK #{day:02d} ({fmt}): {post['headline']}\n" + "-" * 60)
     print("INSTAGRAM:\n" + post["instagram_caption"] + "\n" + "-" * 60)
     print("LINKEDIN:\n" + post["linkedin_post"] + "\n" + "=" * 60)
 
@@ -327,12 +397,13 @@ def cmd_publish():
     if POST_TO_LINKEDIN:
         try:
             post_linkedin(ROOT / post["image"], post["linkedin_post"],
-                          f"{post['headline']}. {post['subline']}")
+                          f"Zephanto Daily Tech Talk #{post['day']:02d}. {post['headline']}")
         except SystemExit as e:
             errors.append(str(e)); print(e)
 
     history = load_history()
-    history.append({"date": post["date"], "headline": post["headline"], "ok": not errors})
+    history.append({"date": post["date"], "day": post["day"], "format": post["format"],
+                    "headline": post["headline"], "ok": not errors})
     HISTORY_FILE.write_text(json.dumps(history[-200:], ensure_ascii=False, indent=2),
                             encoding="utf-8")
     if errors:
