@@ -3,5 +3,12 @@
     "date": "2026-10-28",
     "headline": "Stop Parsing Messy AI Outputs",
     "ok": true
+  },
+  {
+    "date": "2026-10-28",
+    "day": 12,
+    "format": "myth_fact",
+    "headline": "Myth vs Fact: Cloud bills always go up as you scale.",
+    "ok": true
   }
 ]
