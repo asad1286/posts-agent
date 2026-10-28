@@ -237,7 +237,25 @@ def linkedin_text(text):
 
 
 def post_linkedin(image_path, text, alt_text):
-    token, author = env("LINKEDIN_ACCESS_TOKEN"), env("LINKEDIN_PERSON_URN")
+    # --- LinkedIn PAGE via Make.com (used when MAKE_WEBHOOK_URL is set) ---
+    hook = os.getenv("MAKE_WEBHOOK_URL", "").strip()
+    if hook:
+        repo = env("GITHUB_REPOSITORY")
+        branch = os.getenv("GITHUB_REF_NAME", "main")
+        rel = Path(image_path).relative_to(ROOT).as_posix()
+        r = requests.post(hook, timeout=60, json={
+            "text": text,
+            "image_url": f"https://raw.githubusercontent.com/{repo}/{branch}/{rel}",
+            "alt_text": alt_text,
+        })
+        if not r.ok:
+            sys.exit(f"❌ Make webhook error: {r.status_code} {r.text}")
+        print("💼 LinkedIn Page ke liye Make ko bhej diya")
+        return
+    # --- else: LinkedIn API. Company page if LINKEDIN_ORG_URN is set
+    # (token needs w_organization_social), otherwise the personal profile ---
+    token = env("LINKEDIN_ACCESS_TOKEN")
+    author = os.getenv("LINKEDIN_ORG_URN", "").strip() or env("LINKEDIN_PERSON_URN")
     headers = {
         "Authorization": f"Bearer {token}",
         "LinkedIn-Version": LINKEDIN_API_VERSION,
@@ -271,7 +289,8 @@ def post_linkedin(image_path, text, alt_text):
     })
     if not r.ok:
         sys.exit(f"❌ LinkedIn post error: {r.status_code} {r.text}")
-    print("💼 LinkedIn pe post ho gayi")
+    where = "company page" if ":organization:" in author else "personal profile"
+    print(f"💼 LinkedIn pe post ho gayi ({where})")
 
 
 def cmd_generate():

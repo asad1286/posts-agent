@@ -29,6 +29,8 @@ jobs:
       INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
       LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
       LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
+      LINKEDIN_ORG_URN: ${{ secrets.LINKEDIN_ORG_URN }}
+      MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
