@@ -1,0 +1,66 @@
+name: Daily Post
+
+on:
+  schedule:
+    # UTC time. Pakistan = UTC+5.  "7 5 * * *" = roz 10:07 AM Pakistan
+    - cron: "7 5 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Sirf test (post na kare)?"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-post
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+      INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+      LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+      LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Post likho + image banao
+        run: python agent.py generate
+      - name: Image ko repo mein save karo
+        if: env.DRY_RUN != '1'
+        run: |
+          git config user.name "post-agent"
+          git config user.email "post-agent@users.noreply.github.com"
+          git add images/
+          git commit -m "Image for $(date -u +%F)" || echo "Nothing to commit"
+          git push
+          sleep 20
+      - name: Instagram + LinkedIn pe post karo
+        run: python agent.py publish
+      - name: History save karo
+        if: always() && env.DRY_RUN != '1'
+        run: |
+          git add history.json || true
+          git commit -m "History $(date -u +%F)" || echo "Nothing to commit"
+          git pull --rebase && git push || true
+      - name: Preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-preview
+          path: |
+            output/post.json
+            images/*.jpg
+          if-no-files-found: ignore
