@@ -57,10 +57,13 @@ PAST_POSTS = [
 
 POST_TO_INSTAGRAM = True
 POST_TO_LINKEDIN = True
+POST_TO_FACEBOOK = True
+POST_TO_X = True
 
 GEMINI_MODELS = ["gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash"]
 
 INSTAGRAM_API_VERSION = "v26.0"
+FACEBOOK_API_VERSION = "v26.0"
 LINKEDIN_API_VERSION = "202609"
 
 # =====================================================================
@@ -69,6 +72,7 @@ ROOT = Path(__file__).parent
 OUTPUT_DIR = ROOT / "output"
 HISTORY_FILE = ROOT / "history.json"
 POST_FILE = OUTPUT_DIR / "post.json"
+POSTS_DIR = ROOT / "posts"          # one file per day, committed: what was written and where it went
 DRY_RUN = os.getenv("DRY_RUN") == "1"
 
 
@@ -108,6 +112,10 @@ FORMAT_FIELDS = {
     },
 }
 
+CAPTION_KEYS = ["question", "instagram_caption", "linkedin_post", "facebook_caption", "x_post"]
+
+LINK = re.compile(r"https?://|www\.|\b[\w-]+\.(com|net|org|io|ai|co|pk|app|dev)\b", re.IGNORECASE)
+
 LIMITS = {"myth": 75, "fact": 160, "headline_top": 28, "headline_bottom": 40,
           "lead": 55, "punch": 65, "question": 60}
 
@@ -124,6 +132,25 @@ Most small businesses already have a CRM, a form and an email tool. Connecting t
 Which task would you automate first? Tell us in the comments 👇
 
 #Zephanto #DailyTechTalk #MythVsFact #Automation #SmallBusiness #CRM #Zapier #n8n #Productivity
+
+facebook_caption:
+Daily Tech Talk #09: Myth vs Fact
+
+Myth: Automation is only for big companies. ❌
+Fact: Even a 3-person team can automate lead replies, follow-ups and reminders, often with tools it already pays for. ✅
+
+Which task would you automate first? 👇
+
+#Automation #SmallBusiness #CRM #Zephanto
+
+x_post:
+Myth: automation is only for big companies.
+
+Fact: even a 3-person team can automate lead replies, follow-ups and reminders, often with tools it already pays for.
+
+Which task would you automate first? 👇
+
+#Automation #SmallBusiness
 
 linkedin_post:
 "Automation is for big companies with big budgets."
@@ -173,7 +200,7 @@ def build_prompt(history, day, fmt):
     done_text = "\n".join(f"- {h}" for h in done)
     fields = FORMAT_FIELDS[fmt]
     field_text = "\n".join(f'- "{k}": {v}' for k, v in fields.items())
-    keys = ", ".join(f'"{k}": ...' for k in [*fields, "question", "instagram_caption", "linkedin_post"])
+    keys = ", ".join(f'"{k}": ...' for k in [*fields, *CAPTION_KEYS])
     today = datetime.now(timezone.utc).strftime("%A, %d %B %Y")
     return f"""You write the daily social media post for {BRAND_NAME}, a software company.
 Services: {SERVICES}.
@@ -199,6 +226,12 @@ Captions:
 - "linkedin_post": no "Daily Tech Talk" label. A strong first line, short paragraphs,
   one concrete takeaway, written by a practitioner, ends with the question, then 3-4
   hashtags. 100-200 words. Max 1 emoji. No links.
+- "facebook_caption": first line starts with "Daily Tech Talk #{day:02d}". The idea in 2-5 short
+  lines, the question followed by 👇, a blank line, 4-5 hashtags ending with #Zephanto.
+  40-90 words. No links, web addresses or "link in bio".
+- "x_post": the idea in 1-3 short lines, the question, then 2 hashtags. At most 250
+  characters in total, emojis count as 2. No "Daily Tech Talk" label. Absolutely no
+  links or web addresses.
 
 Rules:
 - Specific and useful, not generic. No clickbait.
@@ -217,7 +250,7 @@ def parse_post_json(text, fmt):
     start, end = text.find("{"), text.rfind("}")
     data = json.loads(text[start:end + 1])
     post = {}
-    for key in [*FORMAT_FIELDS[fmt], "question", "instagram_caption", "linkedin_post"]:
+    for key in [*FORMAT_FIELDS[fmt], *CAPTION_KEYS]:
         value = data.get(key)
         if key in ("before", "after"):
             if not isinstance(value, list) or not 3 <= len(value) <= 4:
@@ -232,7 +265,19 @@ def parse_post_json(text, fmt):
             if len(value) > LIMITS.get(key, 10_000):
                 raise ValueError(f"'{key}' bohat lamba hai ({len(value)} characters)")
         post[key] = value
+    # a link costs 13x more on X, and Facebook limits link posts on new Pages
+    for key in ("x_post", "facebook_caption"):
+        if LINK.search(post[key]):
+            raise ValueError(f"'{key}' mein link hai")
+    if x_length(post["x_post"]) > 280:
+        raise ValueError(f"'x_post' 280 se lamba hai ({x_length(post['x_post'])})")
     return post
+
+
+def x_length(text):
+    """Length as X counts it: most emoji and non-Latin characters count as 2."""
+    return sum(1 if ord(c) <= 0x10FF or 0x2000 <= ord(c) <= 0x201F or 0x2032 <= ord(c) <= 0x2037 else 2
+               for c in text)
 
 
 def ask_gemini(prompt, fmt):
@@ -292,6 +337,50 @@ def post_instagram(image_url, caption):
     if not r.ok:
         sys.exit(f"❌ Instagram publish error: {r.status_code} {r.text}")
     print(f"📸 Instagram pe post ho gayi (id {r.json().get('id')})")
+    return r.json().get("id")
+
+
+def post_facebook(image_url, caption):
+    page_id, token = env("FACEBOOK_PAGE_ID"), env("FACEBOOK_PAGE_TOKEN")
+    r = requests.post(f"https://graph.facebook.com/{FACEBOOK_API_VERSION}/{page_id}/photos", timeout=90,
+                      data={"url": image_url, "message": caption, "access_token": token})
+    if not r.ok:
+        sys.exit(f"❌ Facebook post error: {r.status_code} {r.text}")
+    post_id = r.json().get("post_id") or r.json().get("id")
+    print(f"📘 Facebook pe post ho gayi (id {post_id})")
+    return post_id
+
+
+def post_x(image_path, text):
+    from requests_oauthlib import OAuth1
+    auth = OAuth1(env("X_API_KEY"), env("X_API_SECRET"), env("X_ACCESS_TOKEN"), env("X_ACCESS_SECRET"))
+
+    media_ids = []
+    with open(image_path, "rb") as f:
+        up = requests.post("https://api.x.com/2/media/upload", auth=auth, timeout=120,
+                           files={"media": (Path(image_path).name, f, "image/jpeg")},
+                           data={"media_category": "tweet_image", "media_type": "image/jpeg"})
+    if up.ok:
+        body = up.json()
+        media_id = (body.get("data") or {}).get("id") or body.get("media_id_string")
+        if media_id:
+            media_ids = [str(media_id)]
+    if not media_ids:
+        print(f"⚠️ X image upload nahi hui ({up.status_code} {up.text[:300]}). Sirf text post hogi.")
+
+    payload = {"text": text}
+    if media_ids:
+        payload["media"] = {"media_ids": media_ids}
+    r = requests.post("https://api.x.com/2/tweets", auth=auth, json=payload, timeout=60)
+    if r.status_code == 402 or "credit" in r.text.lower():
+        sys.exit(f"❌ X: credits khatam ya nahi hain. console.x.com → Billing → Credits. ({r.status_code} {r.text[:300]})")
+    if r.status_code in (401, 403):
+        sys.exit(f"❌ X: keys ghalat hain ya Access Token 'Read and write' nahi. ({r.status_code} {r.text[:300]})")
+    if not r.ok:
+        sys.exit(f"❌ X post error: {r.status_code} {r.text}")
+    tweet_id = r.json()["data"]["id"]
+    print(f"🐦 X pe post ho gayi (id {tweet_id})")
+    return tweet_id
 
 
 def linkedin_text(text):
@@ -317,7 +406,7 @@ def post_linkedin(image_path, text, alt_text):
         if not r.ok:
             sys.exit(f"❌ Make webhook error: {r.status_code} {r.text}")
         print("💼 LinkedIn Page ke liye Make ko bhej diya")
-        return
+        return "make"
     # --- else: LinkedIn API. Company page if LINKEDIN_ORG_URN is set
     # (token needs w_organization_social), otherwise the personal profile ---
     token = env("LINKEDIN_ACCESS_TOKEN")
@@ -357,57 +446,97 @@ def post_linkedin(image_path, text, alt_text):
         sys.exit(f"❌ LinkedIn post error: {r.status_code} {r.text}")
     where = "company page" if ":organization:" in author else "personal profile"
     print(f"💼 LinkedIn pe post ho gayi ({where})")
+    return where
+
+
+def save_day(post):
+    POSTS_DIR.mkdir(exist_ok=True)
+    (POSTS_DIR / f"{post['date']}.json").write_text(json.dumps(post, ensure_ascii=False, indent=2),
+                                                    encoding="utf-8")
 
 
 def cmd_generate():
     OUTPUT_DIR.mkdir(exist_ok=True)
     (ROOT / "images").mkdir(exist_ok=True)
-    history = load_history()
-    day = next_day(history)
-    fmt = FORMAT_ROTATION[(day - START_DAY) % len(FORMAT_ROTATION)]
-    post = ask_gemini(build_prompt(history, day, fmt), fmt)
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    post.update(day=day, format=fmt, date=stamp, image=f"images/{stamp}.jpg")
-    post["headline"] = summary(post)
-    render.render(post, ROOT / post["image"])
+    saved = POSTS_DIR / f"{stamp}.json"
+    if saved.exists():
+        # the workflow ran again today: reuse the same post, so no platform gets a second one
+        post = json.loads(saved.read_text(encoding="utf-8"))
+        print(f"♻️  Aaj ki post (#{post['day']:02d}) pehle se bani hui hai, wahi istemal hogi. "
+              f"Pehle se post ho chuki: {', '.join(post.get('posted', {})) or 'kahin nahi'}")
+    elif not DRY_RUN and any(h.get("date") == stamp for h in load_history()):
+        # today's post went out before posts/ existed: don't make a second one
+        print("✅ Aaj ki post pehle hi ho chuki hai. Agla run naya post banayega.")
+        return
+    else:
+        history = load_history()
+        day = next_day(history)
+        fmt = FORMAT_ROTATION[(day - START_DAY) % len(FORMAT_ROTATION)]
+        post = ask_gemini(build_prompt(history, day, fmt), fmt)
+        post.update(day=day, format=fmt, date=stamp,
+                    image=f"images/{stamp}.jpg", image_x=f"images/{stamp}-x.jpg", posted={})
+        post["headline"] = summary(post)
+        render.render(post, ROOT / post["image"])
+        render.render(post, ROOT / post["image_x"], landscape=True)
+        save_day(post)
     POST_FILE.write_text(json.dumps(post, ensure_ascii=False, indent=2), encoding="utf-8")
     print("\n" + "=" * 60)
-    print(f"DAILY TECH TALK #{day:02d} ({fmt}): {post['headline']}\n" + "-" * 60)
-    print("INSTAGRAM:\n" + post["instagram_caption"] + "\n" + "-" * 60)
-    print("LINKEDIN:\n" + post["linkedin_post"] + "\n" + "=" * 60)
+    print(f"DAILY TECH TALK #{post['day']:02d} ({post['format']}): {post['headline']}\n" + "-" * 60)
+    for label, key in (("INSTAGRAM", "instagram_caption"), ("LINKEDIN", "linkedin_post"),
+                       ("FACEBOOK", "facebook_caption"), ("X", "x_post")):
+        print(f"{label}:\n{post[key]}\n" + "-" * 60)
 
 
 def cmd_publish():
     if not POST_FILE.exists():
+        stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        if any(h.get("date") == stamp for h in load_history()):
+            print("✅ Aaj ki post pehle hi ho chuki hai, kuch nahi kiya.")
+            return
         sys.exit("❌ output/post.json nahi mila. Pehle 'generate' chalao.")
     post = json.loads(POST_FILE.read_text(encoding="utf-8"))
     if DRY_RUN:
         print("🧪 DRY_RUN: kuch post nahi kiya gaya.")
         return
 
-    errors = []
-    if POST_TO_INSTAGRAM:
-        repo = env("GITHUB_REPOSITORY")
-        branch = os.getenv("GITHUB_REF_NAME", "main")
-        url = f"https://raw.githubusercontent.com/{repo}/{branch}/{post['image']}"
+    repo = os.getenv("GITHUB_REPOSITORY", "")
+    branch = os.getenv("GITHUB_REF_NAME", "main")
+    raw = f"https://raw.githubusercontent.com/{repo}/{branch}/"
+    posted, errors = post.setdefault("posted", {}), []
+
+    def publish(name, enabled, secrets, send):
+        if not enabled:
+            return
+        if name in posted:
+            print(f"⏭️  {name}: aaj pehle hi post ho chuki, dobara nahi")
+            return
+        missing = [n for n in secrets if not os.getenv(n, "").strip()]
+        if missing:
+            print(f"⏭️  {name}: secrets nahi hain ({', '.join(missing)}), is liye chhor diya")
+            return
         try:
-            post_instagram(url, post["instagram_caption"])
-        except SystemExit as e:
-            errors.append(str(e)); print(e)
-    if POST_TO_LINKEDIN:
-        try:
-            post_linkedin(ROOT / post["image"], post["linkedin_post"],
-                          f"Zephanto Daily Tech Talk #{post['day']:02d}. {post['headline']}")
+            posted[name] = send() or "ok"
         except SystemExit as e:
             errors.append(str(e)); print(e)
 
-    history = load_history()
+    alt = f"Zephanto Daily Tech Talk #{post['day']:02d}. {post['headline']}"
+    publish("instagram", POST_TO_INSTAGRAM, ["INSTAGRAM_ACCESS_TOKEN", "INSTAGRAM_USER_ID"],
+            lambda: post_instagram(raw + post["image"], post["instagram_caption"]))
+    publish("linkedin", POST_TO_LINKEDIN, [],
+            lambda: post_linkedin(ROOT / post["image"], post["linkedin_post"], alt))
+    publish("facebook", POST_TO_FACEBOOK, ["FACEBOOK_PAGE_ID", "FACEBOOK_PAGE_TOKEN"],
+            lambda: post_facebook(raw + post["image"], post["facebook_caption"]))
+    publish("x", POST_TO_X, ["X_API_KEY", "X_API_SECRET", "X_ACCESS_TOKEN", "X_ACCESS_SECRET"],
+            lambda: post_x(ROOT / post.get("image_x", post["image"]), post["x_post"]))
+
+    save_day(post)
+    history = [h for h in load_history() if not (h.get("date") == post["date"] and h.get("day") == post["day"])]
     history.append({"date": post["date"], "day": post["day"], "format": post["format"],
-                    "headline": post["headline"], "ok": not errors})
-    HISTORY_FILE.write_text(json.dumps(history[-200:], ensure_ascii=False, indent=2),
-                            encoding="utf-8")
+                    "headline": post["headline"], "posted": sorted(posted), "ok": not errors})
+    HISTORY_FILE.write_text(json.dumps(history[-200:], ensure_ascii=False, indent=2), encoding="utf-8")
     if errors:
-        sys.exit("⚠️ Kuch platforms pe post fail hui (upar dekho).")
+        sys.exit("⚠️ Kuch platforms pe post fail hui (upar dekho). Workflow dobara chalane se sirf yehi platforms chalenge.")
     print("✅ Aaj ki post mukammal!")
 
 

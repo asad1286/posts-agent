@@ -31,6 +31,12 @@ jobs:
       LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
       LINKEDIN_ORG_URN: ${{ secrets.LINKEDIN_ORG_URN }}
       MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+      FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+      FACEBOOK_PAGE_TOKEN: ${{ secrets.FACEBOOK_PAGE_TOKEN }}
+      X_API_KEY: ${{ secrets.X_API_KEY }}
+      X_API_SECRET: ${{ secrets.X_API_SECRET }}
+      X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+      X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -45,7 +51,7 @@ jobs:
         run: |
           git config user.name "post-agent"
           git config user.email "post-agent@users.noreply.github.com"
-          git add images/
+          git add images/ posts/
           git commit -m "Image for $(date -u +%F)" || echo "Nothing to commit"
           git push
           sleep 20
@@ -54,7 +60,7 @@ jobs:
       - name: History save karo
         if: always() && env.DRY_RUN != '1'
         run: |
-          git add history.json || true
+          git add history.json posts/ || true
           git commit -m "History $(date -u +%F)" || echo "Nothing to commit"
           git pull --rebase && git push || true
       - name: Preview
@@ -65,4 +71,5 @@ jobs:
           path: |
             output/post.json
             images/*.jpg
+            posts/*.json
           if-no-files-found: ignore
