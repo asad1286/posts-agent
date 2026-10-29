@@ -10,5 +10,12 @@
     "format": "myth_fact",
     "headline": "Myth vs Fact: Cloud bills always go up as you scale.",
     "ok": true
+  },
+  {
+    "date": "2026-10-29",
+    "day": 13,
+    "format": "before_after",
+    "headline": "Before / After: New client signed. Two ways to handle day one.",
+    "ok": true
   }
 ]
