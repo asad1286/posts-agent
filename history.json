@@ -17,5 +17,16 @@
     "format": "before_after",
     "headline": "Before / After: New client signed. Two ways to handle day one.",
     "ok": true
+  },
+  {
+    "date": "2026-10-30",
+    "day": 14,
+    "format": "quote",
+    "headline": "Quote: The best software doesn't add steps. It removes the ones nobody wanted to do.",
+    "posted": [
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
