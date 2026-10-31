@@ -29,5 +29,17 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-10-31",
+    "day": 15,
+    "format": "myth_fact",
+    "headline": "Myth vs Fact: A new CRM will fix a broken sales process.",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
