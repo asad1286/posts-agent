@@ -1,0 +1,28 @@
+{
+  "headline_top": "Monthly reporting.",
+  "headline_bottom": "Two ways to see your numbers.",
+  "before": [
+    "Export CSVs from five different tools",
+    "Paste data into a bloated spreadsheet",
+    "Manually fix formulas and date formats",
+    "Send a static report that is out of date"
+  ],
+  "after": [
+    "Connect all platforms via direct APIs",
+    "Clean data pipelines refresh hourly",
+    "Track revenue on one live dashboard",
+    "Share real-time data with leadership"
+  ],
+  "question": "How many tools do you pull numbers from?",
+  "instagram_caption": "Daily Tech Talk #16: Before / After\n\nManual reporting drains hours every single month.\nAutomated dashboards give you the truth in seconds.\n\nMost teams still spend the first week of every month exporting CSVs, fixing broken spreadsheet formulas, and reconciling mismatched dates. When you connect your payment processor, CRM, and ad platforms into a single automated pipeline, leadership always looks at live data instead of yesterday's guesses.\n\nHow many tools do you pull numbers from? Tell us in the comments 👇\n\nFree 30-minute CRM & automation audit, link in bio.\n\n#Zephanto #DailyTechTalk #WorkflowAutomation #DataPipelines #Operations #Dashboard #Automation #BusinessGrowth #TechStrategy",
+  "linkedin_post": "First week of the month shouldn't be spent wrestling with spreadsheets.\n\nHere is what usually happens across growing companies:\nAn ops lead downloads CSVs from Stripe, HubSpot, and Google Ads. They paste them into a master sheet, fix three broken VLOOKUPs, and email a static PDF to the leadership team. By the time anyone reads it, the numbers are already old.\n\nWhen you connect those systems through simple workflow automations or lightweight internal dashboards, the friction disappears.\n\nYour data syncs directly from the source. Metrics update automatically, and anomalies flag themselves before the monthly review even starts.\n\nSoftware shouldn't just store information. It should bring your numbers together so your team can make decisions faster.\n\nHow many tools do you pull numbers from?\n\n#Operations #WorkflowAutomation #BusinessIntelligence #Productivity",
+  "facebook_caption": "Daily Tech Talk #16: Before / After\n\nExporting CSVs and fixing broken formulas every month isn't reporting—it's busywork.\nConnecting your tools into a live automated dashboard saves entire days of manual data entry and gives you accurate numbers instantly.\n\nHow many tools do you pull numbers from? 👇\n\n#Operations #WorkflowAutomation #SmallBusiness #BusinessIntelligence #Zephanto",
+  "x_post": "Exporting CSVs and fixing broken formulas every month isn't reporting—it's busywork.\n\nAutomating your data into one live dashboard gives you answers in seconds.\n\nHow many tools do you pull numbers from? 👇\n\n#Automation #Operations",
+  "day": 16,
+  "format": "before_after",
+  "date": "2026-11-01",
+  "image": "images/2026-11-01.jpg",
+  "image_x": "images/2026-11-01-x.jpg",
+  "posted": {},
+  "headline": "Before / After: Monthly reporting. Two ways to see your numbers."
+}
