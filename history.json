@@ -41,5 +41,17 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-01",
+    "day": 16,
+    "format": "before_after",
+    "headline": "Before / After: Monthly reporting. Two ways to see your numbers.",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
