@@ -65,5 +65,17 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-03",
+    "day": 18,
+    "format": "myth_fact",
+    "headline": "Myth vs Fact: Cloud bills always go up as you scale.",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
