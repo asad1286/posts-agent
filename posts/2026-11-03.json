@@ -1,0 +1,16 @@
+{
+  "myth": "Cloud bills always go up as you scale.",
+  "fact": "Proper infrastructure sizing and shutting down unused staging servers often cuts cloud costs by 30% without changing performance.",
+  "question": "When did you last audit your cloud bill?",
+  "instagram_caption": "Daily Tech Talk #18: Myth vs Fact\n\nMyth: Cloud bills always go up as you scale. ❌\nFact: Proper infrastructure sizing and shutting down unused staging servers often cuts cloud costs by 30% without changing performance. ✅\n\nMany growing businesses leave test environments running 24/7 or provision servers for traffic they rarely see. A quick infrastructure review usually reveals easy savings.\n\nWhen did you last audit your cloud bill? Tell us in the comments 👇\n\n#Zephanto #DailyTechTalk #Cloud #DevOps #Infrastructure #CloudHosting #SmallBusiness #TechTips #Operations",
+  "linkedin_post": "\"Cloud bills just go up as your business grows.\"\n\nIt is an accepted truth for many founders, but it doesn't have to be.\n\nMore often than not, rising cloud costs come from accumulated waste rather than actual scale: forgotten staging servers, oversized databases, and unoptimized data storage that quietly run month after month.\n\nBefore you add more budget to your infrastructure, take a look at what is already running. Turning off non-production environments outside working hours and matching server sizes to actual usage can noticeably lower your monthly spend.\n\nWhen did you last audit your cloud bill?\n\n#Cloud #DevOps #Infrastructure #SmallBusiness",
+  "facebook_caption": "Daily Tech Talk #18: Myth vs Fact\n\nMyth: Cloud bills always go up as you scale. ❌\nFact: Proper infrastructure sizing and shutting down unused staging servers often cuts cloud costs by 30% without changing performance. ✅\n\nWhen did you last audit your cloud bill? 👇\n\n#Cloud #DevOps #Infrastructure #Zephanto",
+  "x_post": "Myth: cloud bills always go up as you scale.\n\nFact: proper sizing and shutting down idle staging servers often cuts costs by 30% without affecting performance.\n\nWhen did you last audit your cloud bill?\n\n#Cloud #DevOps",
+  "day": 18,
+  "format": "myth_fact",
+  "date": "2026-11-03",
+  "image": "images/2026-11-03.jpg",
+  "image_x": "images/2026-11-03-x.jpg",
+  "posted": {},
+  "headline": "Myth vs Fact: Cloud bills always go up as you scale."
+}
