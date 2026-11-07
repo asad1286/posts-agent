@@ -1,0 +1,16 @@
+{
+  "myth": "Custom software means building everything from scratch.",
+  "fact": "Most projects combine solid open-source foundations with tailored business logic, saving months of time.",
+  "question": "Build or buy?",
+  "instagram_caption": "Daily Tech Talk #21: Myth vs Fact\n\nMyth: Custom software means building everything from scratch.\nFact: Most projects combine solid open-source foundations with tailored business logic, saving months of time.\n\nYou do not need to rewrite the wheel to get software that fits your exact workflow. We usually start with proven frameworks and build only the specific logic your team needs.\n\nBuild or buy? Tell us in the comments 👇\n\n#Zephanto #DailyTechTalk #MythVsFact #CustomSoftware #SoftwareDevelopment #TechMyths #Founders #BusinessGrowth",
+  "linkedin_post": "\"You have to build custom software completely from scratch.\"\n\nThis is one of the most common misconceptions I hear from founders exploring new tools.\n\nIn reality, building from scratch for the sake of it is a waste of time and budget. The best custom solutions rely on robust, open-source foundations or existing libraries for standard features like auth, security, and data storage.\n\nYour budget and time should go entirely toward what makes your business unique: your specific workflow, your proprietary logic, and your user experience.\n\nDon't reinvent the wheel. Build the engine.\n\nBuild or buy?\n\n#CustomSoftware #SoftwareEngineering #Founders #Operations",
+  "facebook_caption": "Daily Tech Talk #21: Myth vs Fact\n\nMyth: Custom software means building everything from scratch.\nFact: Most projects combine solid open-source foundations with tailored business logic, saving months of time.\n\nBuild or buy? 👇\n\n#CustomSoftware #SoftwareDevelopment #BusinessGrowth #Zephanto",
+  "x_post": "Myth: custom software means building everything from scratch.\n\nFact: most projects combine solid open-source foundations with tailored business logic, saving months.\n\nBuild or buy?\n\n#SoftwareDevelopment #TechMyths",
+  "day": 21,
+  "format": "myth_fact",
+  "date": "2026-11-07",
+  "image": "images/2026-11-07.jpg",
+  "image_x": "images/2026-11-07-x.jpg",
+  "posted": {},
+  "headline": "Myth vs Fact: Custom software means building everything from scratch."
+}
