@@ -1,0 +1,28 @@
+{
+  "headline_top": "Deal closed.",
+  "headline_bottom": "Two ways to hand it off.",
+  "before": [
+    "Sales rep writes messy Slack recap",
+    "Files scattered across email threads",
+    "Client repeats goals on a long call",
+    "Kickoff delayed by two weeks"
+  ],
+  "after": [
+    "CRM deal closes and triggers workflow",
+    "Project board and folders auto-created",
+    "Client gets pre-filled onboarding form",
+    "Kickoff scheduled on day one"
+  ],
+  "question": "How smooth is your sales-to-ops handoff?",
+  "instagram_caption": "Daily Tech Talk #22\n\nClosing the deal is exciting. Handing it over to operations often isn't.\n\nWhen sales handoffs rely on memory and scattered Slack threads, project kickoff stalls and clients notice right away.\n\nConnecting your CRM directly to your project management tool turns deal closure into an instant, organized launchpad without duplicate typing.\n\nHow smooth is your sales-to-ops handoff? Tell us in the comments 👇\n\nFree 30-minute CRM & automation audit, link in bio.\n\n#Zephanto #DailyTechTalk #WorkflowAutomation #CRM #Operations #AgencyLife #BusinessSystems #Productivity",
+  "linkedin_post": "Closing a new client feels great until you have to hand the work over to delivery.\n\nToo often, the handoff looks like this: a rushed Slack message, client files buried across email threads, and an ops team asking questions the client already answered two weeks ago.\n\nIt wastes billable hours and makes a shaky first impression.\n\nA clean handoff doesn't require extra meetings. It requires connected tools.\n\nWhen a deal marks \"Closed Won\" in your CRM:\n• Your project management tool can generate the client workspace automatically.\n• Internal shared folders and permissions can spin up instantly.\n• An onboarding form can pre-populate with known deal data.\n\nYour sales team moves on to the next deal, and your ops team gets every detail they need without chasing anyone.\n\nHow smooth is your sales-to-ops handoff?\n\n#Operations #WorkflowAutomation #CRM #AgencyGrowth",
+  "facebook_caption": "Daily Tech Talk #22\n\nClosing a deal shouldn't mean chaos for your delivery team.\n\nManual handoffs mean missing files, delayed kickoffs, and frustrated clients answering the same questions twice.\n\nWhen your CRM talks directly to your project management platform, new workspaces and folders set themselves up the moment a contract is signed.\n\nHow smooth is your sales-to-ops handoff? 👇\n\n#WorkflowAutomation #CRM #Operations #Productivity #Zephanto",
+  "x_post": "A closed deal shouldn't mean chaos for delivery.\n\nConnecting your CRM to your project tool can create workspaces, folders, and onboarding tasks the moment a deal is won.\n\nHow smooth is your sales-to-ops handoff? 👇\n\n#Operations #CRM",
+  "day": 22,
+  "format": "before_after",
+  "date": "2026-11-08",
+  "image": "images/2026-11-08.jpg",
+  "image_x": "images/2026-11-08-x.jpg",
+  "posted": {},
+  "headline": "Before / After: Deal closed. Two ways to hand it off."
+}
