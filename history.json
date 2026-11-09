@@ -125,5 +125,17 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-09",
+    "day": 23,
+    "format": "quote",
+    "headline": "Quote: Great custom software doesn't add steps. It removes the ones nobody wanted to do.",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
