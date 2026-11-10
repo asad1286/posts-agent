@@ -11,6 +11,10 @@
   "date": "2026-11-10",
   "image": "images/2026-11-10.jpg",
   "image_x": "images/2026-11-10-x.jpg",
-  "posted": {},
+  "posted": {
+    "instagram": "18107528042367306",
+    "linkedin": "make",
+    "facebook": "1119335831273034_122129772741398666"
+  },
   "headline": "Myth vs Fact: Custom software means building everything from scratch."
 }
