@@ -1,0 +1,16 @@
+{
+  "myth": "Custom software means building everything from scratch.",
+  "fact": "Most projects combine reliable open-source frameworks, APIs, and targeted custom code so you only build what makes you unique.",
+  "question": "Build vs buy: what's your take?",
+  "instagram_caption": "Daily Tech Talk #24: Myth vs Fact\n\nMyth: Custom software means building everything from scratch. ❌\nFact: Most projects combine reliable open-source frameworks, APIs, and targeted custom code so you only build what makes you unique. ✅\n\nStarting from a blank slate for standard features is a waste of time and budget. The right approach is to reuse what is proven and write custom code only for your core business logic.\n\nBuild vs buy: what's your take? Tell us in the comments 👇\n\n#Zephanto #DailyTechTalk #CustomSoftware #SoftwareDevelopment #TechMyths #WebDevelopment #Programming #TechConsulting",
+  "linkedin_post": "\"You need to build everything from scratch to get custom software.\"\n\nIt is one of the most common misconceptions in tech. When founders hear \"custom,\" they picture years of development and endless code.\n\nIn reality, building custom software today rarely means writing a database or user authentication from zero. Reliable open-source frameworks, secure cloud infrastructure, and robust third-party APIs handle the foundation.\n\nYour development partner should focus custom code strictly on your unique workflow and business logic. That is how you get a tailored solution without paying for reinvented wheels.\n\nBuild vs buy: what is your take?\n\n#CustomSoftware #SoftwareDevelopment #TechStrategy #Operations",
+  "facebook_caption": "Daily Tech Talk #24: Myth vs Fact\n\nMyth: Custom software means building everything from scratch. ❌\nFact: Most projects combine reliable open-source frameworks, APIs, and targeted custom code so you only build what makes you unique. ✅\n\nBuild vs buy: what's your take? 👇\n\n#CustomSoftware #Development #TechMyths #Zephanto",
+  "x_post": "Myth: custom software means building everything from scratch.\n\nFact: most projects combine reliable open-source frameworks and APIs, writing custom code only for your unique business logic.\n\nBuild vs buy: what's your take? 👇\n\n#SoftwareDevelopment #TechStrategy",
+  "day": 24,
+  "format": "myth_fact",
+  "date": "2026-11-10",
+  "image": "images/2026-11-10.jpg",
+  "image_x": "images/2026-11-10-x.jpg",
+  "posted": {},
+  "headline": "Myth vs Fact: Custom software means building everything from scratch."
+}
