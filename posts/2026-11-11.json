@@ -1,0 +1,28 @@
+{
+  "headline_top": "Support ticket.",
+  "headline_bottom": "Two ways to triage it.",
+  "before": [
+    "Customer emails support",
+    "Ticket sits unassigned",
+    "Agent manually copies info",
+    "Customer waits hours"
+  ],
+  "after": [
+    "Ticket lands in helpdesk",
+    "Rules route it instantly",
+    "CRM data pre-loads",
+    "Auto-reply goes out"
+  ],
+  "question": "How fast does your team reply to new tickets?",
+  "instagram_caption": "Daily Tech Talk #25: Before / After\n\nSupport ticket triage:\nManual vs automated routing.\n\nA slow support queue frustrates customers before anyone even reads their message. Setting up basic routing rules keeps things moving without extra staff.\n\nFree 30-minute CRM & automation audit, link in bio.\n\nHow fast does your team reply to new tickets? Tell us in the comments 👇\n\n#Zephanto #DailyTechTalk #CustomerSupport #Automation #Helpdesk #Operations #Workflow #Productivity #SmallBusiness",
+  "linkedin_post": "Support ticket triage is often a bottleneck.\n\nIn many teams, an incoming email sits in an inbox until someone manually checks it, reads it, decides who should handle it, and forwards it along.\n\nCompare that to a system where incoming tickets are tagged by keyword, assigned to the right person based on availability, and given a priority score in seconds.\n\nThe difference isn't just speed. It's the mental energy saved by your support team before they even write a reply.\n\nHow fast does your team reply to new tickets?\n\n#CustomerSupport #Operations #Automation #Workflow",
+  "facebook_caption": "Daily Tech Talk #25: Before / After\n\nSupport ticket triage:\nManual vs automated routing.\n\nA slow support queue frustrates customers before anyone even reads their message. Setting up basic routing rules keeps things moving without extra staff.\n\nHow fast does your team reply to new tickets? 👇\n\n#CustomerSupport #Automation #Operations #Zephanto",
+  "x_post": "Support triage: manual vs automated routing.\n\nManual: email sits unassigned until someone checks it.\n\nAutomated: rules tag, assign, and prioritize in seconds.\n\nHow fast does your team reply to new tickets? 👇\n\n#CustomerSupport #Operations",
+  "day": 25,
+  "format": "before_after",
+  "date": "2026-11-11",
+  "image": "images/2026-11-11.jpg",
+  "image_x": "images/2026-11-11-x.jpg",
+  "posted": {},
+  "headline": "Before / After: Support ticket. Two ways to triage it."
+}
