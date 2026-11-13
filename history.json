@@ -173,5 +173,17 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-13",
+    "day": 27,
+    "format": "myth_fact",
+    "headline": "Myth vs Fact: Custom software means building everything from scratch.",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
