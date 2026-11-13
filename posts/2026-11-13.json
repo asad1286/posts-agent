@@ -1,0 +1,16 @@
+{
+  "myth": "Custom software means building everything from scratch.",
+  "fact": "Good custom development uses proven open-source foundations and APIs, so you only build the parts unique to your business.",
+  "question": "Build from scratch or connect existing tools?",
+  "instagram_caption": "Daily Tech Talk #27: Myth vs Fact\n\nMyth: Custom software means building everything from scratch. ❌\nFact: Good custom development uses proven open-source foundations and APIs, so you only build the parts unique to your business. ✅\n\nYou do not need to rewrite the wheel to get software that fits your exact workflow. Combining existing APIs with custom logic saves months of development time.\n\nBuild from scratch or connect existing tools? Tell us in the comments 👇\n\n#Zephanto #DailyTechTalk #MythVsFact #CustomSoftware #SoftwareDevelopment #TechMyths #WebDev #BusinessTech",
+  "linkedin_post": "\"You have to build the whole system from scratch.\"\n\nThat is one of the most common misconceptions about custom software, and it often stops growing businesses from getting the tools they actually need.\n\nModern software development rarely starts with a blank screen. Instead, it relies on solid open-source foundations, secure authentication providers, and established cloud infrastructure.\n\nYour development team should only write custom code for the workflows that make your business unique. Everything else—user login, database storage, basic UI components—should leverage proven tools.\n\nThis approach cuts development time in half and keeps your budget focused on features that actually move the needle.\n\nBuild from scratch or connect existing tools?\n\n#CustomSoftware #SoftwareEngineering #TechStrategy #Operations",
+  "facebook_caption": "Daily Tech Talk #27: Myth vs Fact\n\nMyth: Custom software means building everything from scratch. ❌\nFact: Good custom development uses proven open-source foundations and APIs, so you only build the parts unique to your business. ✅\n\nBuild from scratch or connect existing tools? 👇\n\n#CustomSoftware #SoftwareDevelopment #TechMyths #Zephanto",
+  "x_post": "Myth: custom software means building everything from scratch.\n\nFact: good development uses proven APIs and foundations, so you only build what is unique to you.\n\nBuild from scratch or connect existing tools? 👇\n\n#CustomSoftware #TechMyth",
+  "day": 27,
+  "format": "myth_fact",
+  "date": "2026-11-13",
+  "image": "images/2026-11-13.jpg",
+  "image_x": "images/2026-11-13-x.jpg",
+  "posted": {},
+  "headline": "Myth vs Fact: Custom software means building everything from scratch."
+}
