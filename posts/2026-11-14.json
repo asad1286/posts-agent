@@ -1,0 +1,28 @@
+{
+  "headline_top": "Support ticket.",
+  "headline_bottom": "Two ways to triage it.",
+  "before": [
+    "Customer waits for email reply",
+    "Agent reads history manually",
+    "Tech team pinged for context",
+    "Update sent after 24 hours"
+  ],
+  "after": [
+    "Instant ticket categorization",
+    "Context auto-loaded in CRM",
+    "Suggested fixes provided",
+    "Resolved in under 10 minutes"
+  ],
+  "question": "How fast is your current support triage?",
+  "instagram_caption": "Daily Tech Talk #28: Before & After ⚡\n\nSupport ticket triage: manual delay vs automated clarity.\n\nWhen support requests sit in an unorganized inbox, customers wait and internal teams waste hours searching for context. Connecting your ticketing tool to your CRM changes that instantly.\n\nFree 30-minute CRM & automation audit, link in bio.\n\nHow fast is your current support triage? Tell us in the comments 👇\n\n#Zephanto #DailyTechTalk #CustomerSupport #WorkflowAutomation #CRM #Operations #Productivity #SmallBusiness #Tech",
+  "linkedin_post": "Support ticket triage can make or break customer retention.\n\nWhen a request comes in, the clock starts. Here is how two different teams handle the exact same morning queue.\n\nThe manual way:\nThe ticket sits in a shared inbox. An agent opens it, reads the thread history, asks the technical team for context via chat, and finally writes a reply hours later.\n\nThe automated way:\nThe ticket is categorized instantly by topic and account value. Past purchases and recent logs appear directly in the CRM view. Suggested resolutions pop up for the agent, cutting response time to minutes.\n\nThe takeaway: fast support isn't about typing faster. It's about removing the manual hunt for information.\n\nHow fast is your current support triage?\n\n#CustomerSupport #Operations #Automation #Support",
+  "facebook_caption": "Daily Tech Talk #28: Before & After\n\nSupport ticket triage:\nWaiting in an inbox vs instant CRM context and categorization.\n\nFast support isn't about typing faster. It is about removing the manual hunt for information so your team can focus on solutions.\n\nHow fast is your current support triage? 👇\n\n#CustomerSupport #Operations #Automation #Zephanto",
+  "x_post": "Support triage:\n\nManual: waiting in an inbox, hunting for context across chats, replying hours later.\n\nAutomated: instant categorization, CRM context loaded, resolved in minutes.\n\nHow fast is your support triage?\n\n#CustomerSupport #Operations",
+  "day": 28,
+  "format": "before_after",
+  "date": "2026-11-14",
+  "image": "images/2026-11-14.jpg",
+  "image_x": "images/2026-11-14-x.jpg",
+  "posted": {},
+  "headline": "Before / After: Support ticket. Two ways to triage it."
+}
