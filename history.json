@@ -185,5 +185,17 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-14",
+    "day": 28,
+    "format": "before_after",
+    "headline": "Before / After: Support ticket. Two ways to triage it.",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
