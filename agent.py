@@ -6,6 +6,7 @@ pe post karta hai.
   python agent.py publish    -> Instagram aur LinkedIn pe post karta hai
 """
 
+import difflib
 import json
 import os
 import re
@@ -53,6 +54,55 @@ PAST_POSTS = [
     "Myth vs Fact: automation is only for big companies",
     "Before / After: same lead, two very different outcomes (manual vs automated follow-up)",
     "Quote: the best software doesn't add steps, it removes the ones nobody wanted to do",
+]
+
+# Har din is list ka agla (ab tak istemal na hua) topic liya jata hai, taake posts dohrayi na jayein.
+# Naye topics neeche jor sakte ho. Sab istemal ho jayein to list dobara shuru hoti hai.
+TOPIC_BANK = [
+    "Missed-call text-back for service businesses",
+    "Duplicate contacts in the CRM",
+    "Slow websites losing visitors on mobile",
+    "An AI chatbot that answers website FAQs",
+    "Automatic invoice and payment reminders",
+    "Choosing between Zapier, Make and n8n",
+    "Automating new-client onboarding",
+    "Backups and disaster recovery for small teams",
+    "Mobile app or mobile-friendly website",
+    "Lead scoring in HubSpot",
+    "Appointment reminders that cut no-shows",
+    "Cleaning data before a CRM migration",
+    "AI summaries of sales calls",
+    "Staging vs production environments",
+    "Form design that gets more submissions",
+    "Automating the weekly report",
+    "GoHighLevel pipelines for agencies",
+    "Offboarding staff from every tool on their last day",
+    "AI voice agents for after-hours calls",
+    "Writing a clear brief before hiring developers",
+    "Connecting payments (Stripe) to the CRM",
+    "Email deliverability: SPF, DKIM and DMARC",
+    "Custom modules in Zoho CRM for unusual processes",
+    "Monitoring and alerts so you hear about downtime first",
+    "Internal dashboards that replace shared spreadsheets",
+    "Automatic review requests after a finished job",
+    "Website accessibility basics",
+    "MVP scope: what to cut from version one",
+    "AI extracting data from invoices and documents",
+    "Webhooks explained simply",
+    "Automated quotes and proposals",
+    "Automated deployments (CI/CD) for small teams",
+    "Fewer steps in sign-up and checkout",
+    "A customer portal instead of 'any update?' emails",
+    "Syncing inventory between the shop and accounting",
+    "Two-factor login and password managers for teams",
+    "AI-drafted email replies with a human check",
+    "Rewrite or refactor old software",
+    "Tracking which channel brings your leads (UTM tags)",
+    "Automating a recruitment pipeline",
+    "Multilingual websites",
+    "Automations that fail silently, and how to catch errors",
+    "Design systems for a consistent product",
+    "Measuring automation ROI in hours saved",
 ]
 
 POST_TO_INSTAGRAM = True
@@ -107,7 +157,7 @@ FORMAT_FIELDS = {
         "after": "list of exactly 4 short steps (max 40 characters each) showing the same thing done well",
     },
     "quote": {
-        "lead": "first half of one strong original statement, max 45 characters",
+        "lead": "first half of one strong original statement about today's topic, max 45 characters",
         "punch": "second half that lands the point, max 55 characters",
     },
 }
@@ -119,7 +169,9 @@ LINK = re.compile(r"https?://|www\.|\b[\w-]+\.(com|net|org|io|ai|co|pk|app|dev)\
 LIMITS = {"myth": 75, "fact": 160, "headline_top": 28, "headline_bottom": 40,
           "lead": 55, "punch": 65, "question": 60}
 
-STYLE_EXAMPLES = """Example (Daily Tech Talk #09, myth_fact):
+STYLE_EXAMPLES = """The examples below show tone and layout ONLY. Never reuse their topics, wording or quote.
+
+Example (Daily Tech Talk #09, myth_fact):
 
 instagram_caption:
 Daily Tech Talk #09: Myth vs Fact
@@ -195,7 +247,29 @@ def summary(post):
     return f"Quote: {post['lead']} {post['punch']}"
 
 
-def build_prompt(history, day, fmt):
+def pick_topic(history):
+    """The first topic in TOPIC_BANK not used yet; when all are used, start again
+    but skip the 15 most recent ones."""
+    used = [h.get("topic") for h in history if h.get("topic")]
+    fresh = [t for t in TOPIC_BANK if t not in used]
+    if not fresh:
+        recent = set(used[-15:])
+        fresh = [t for t in TOPIC_BANK if t not in recent] or TOPIC_BANK
+    return fresh[0]
+
+
+def too_similar(headline, history):
+    """The earlier headline this one nearly repeats, or None."""
+    done = PAST_POSTS + [h["headline"] for h in history]
+    a = re.sub(r"^(quote|myth vs fact|before / after):\s*", "", headline.lower())
+    for old in done:
+        b = re.sub(r"^(quote|myth vs fact|before / after):\s*", "", old.lower())
+        if difflib.SequenceMatcher(None, a, b).ratio() > 0.72:
+            return old
+    return None
+
+
+def build_prompt(history, day, fmt, topic):
     done = PAST_POSTS + [h["headline"] for h in history[-40:]]
     done_text = "\n".join(f"- {h}" for h in done)
     fields = FORMAT_FIELDS[fmt]
@@ -208,8 +282,8 @@ Audience: {AUDIENCE}.
 Tone: {TONE}. Language: English.
 Today is {today}. This is "Daily Tech Talk #{day:02d}", format: {fmt}.
 
-Pick ONE fresh topic connected to one of the services. It must not repeat or closely
-rephrase any earlier post:
+Today's topic: {topic}
+Write about this topic only. Do not repeat or closely rephrase any earlier post:
 {done_text}
 
 Text for the image:
@@ -473,8 +547,18 @@ def cmd_generate():
         history = load_history()
         day = next_day(history)
         fmt = FORMAT_ROTATION[(day - START_DAY) % len(FORMAT_ROTATION)]
-        post = ask_gemini(build_prompt(history, day, fmt), fmt)
-        post.update(day=day, format=fmt, date=stamp,
+        topic = pick_topic(history)
+        prompt = build_prompt(history, day, fmt, topic)
+        for attempt in range(3):
+            post = ask_gemini(prompt, fmt)
+            same = too_similar(summary({**post, "format": fmt}), history)
+            if not same:
+                break
+            print(f"🔁 Post purani post jaisi thi ({same}), dobara likhwa rahe hain")
+            prompt += (f"\n\nYour previous answer was too close to an earlier post: \"{same}\". "
+                       "Write something clearly different.")
+        print(f"🧭 Aaj ka topic: {topic}")
+        post.update(day=day, format=fmt, date=stamp, topic=topic,
                     image=f"images/{stamp}.jpg", image_x=f"images/{stamp}-x.jpg", posted={})
         post["headline"] = summary(post)
         render.render(post, ROOT / post["image"])
@@ -533,7 +617,7 @@ def cmd_publish():
     save_day(post)
     history = [h for h in load_history() if not (h.get("date") == post["date"] and h.get("day") == post["day"])]
     history.append({"date": post["date"], "day": post["day"], "format": post["format"],
-                    "headline": post["headline"], "posted": sorted(posted), "ok": not errors})
+                    "headline": post["headline"], "topic": post.get("topic"), "posted": sorted(posted), "ok": not errors})
     HISTORY_FILE.write_text(json.dumps(history[-200:], ensure_ascii=False, indent=2), encoding="utf-8")
     if errors:
         sys.exit("⚠️ Kuch platforms pe post fail hui (upar dekho). Workflow dobara chalane se sirf yehi platforms chalenge.")
