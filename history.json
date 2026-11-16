@@ -209,5 +209,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-16",
+    "day": 30,
+    "format": "myth_fact",
+    "headline": "Myth vs Fact: Missed calls mean lost leads forever.",
+    "topic": "Missed-call text-back for service businesses",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
