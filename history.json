@@ -222,5 +222,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-17",
+    "day": 31,
+    "format": "before_after",
+    "headline": "Before / After: Duplicate CRM contacts Two ways to handle messy data.",
+    "topic": "Duplicate contacts in the CRM",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
