@@ -1,0 +1,29 @@
+{
+  "headline_top": "Unpaid invoice.",
+  "headline_bottom": "Two ways to get settled.",
+  "before": [
+    "Check bank statement manually every week",
+    "Realize an invoice is 14 days overdue",
+    "Type an awkward chase email by hand",
+    "Wait and repeat when it is ignored"
+  ],
+  "after": [
+    "Invoice sent with automated due dates",
+    "Friendly reminder sent 3 days before",
+    "Instant follow-up on day 1 overdue",
+    "Receipt sent automatically once paid"
+  ],
+  "question": "How do you track unpaid invoices?",
+  "instagram_caption": "Daily Tech Talk #34: Before / After\n\nChasing late payments by hand wastes time and strains client relationships.\nAutomated reminders trigger polite follow-ups before and after the due date, keeping cash flow steady without awkward manual emails.\nConnecting your billing software to your CRM removes the guesswork completely.\n\nHow do you track unpaid invoices? Tell us in the comments 👇\n\nFree 30-minute CRM & automation audit, link in bio.\n\n#Zephanto #DailyTechTalk #Automation #WorkflowAutomation #Invoicing #SmallBusiness #Operations #CashFlow #Zapier",
+  "linkedin_post": "Chasing overdue invoices is one of the most uncomfortable tasks on a founder's to-do list.\n\nWhen done manually, it usually goes like this: you check your bank account on a Friday, notice an invoice from two weeks ago is unpaid, and spend twenty minutes drafting a polite follow-up email that feels awkward to send.\n\nThere is a simpler way.\n\nA simple automated workflow can handle the entire cycle:\n• Send a friendly reminder 3 days before the due date\n• Send an automatic nudge the morning after it becomes overdue\n• Update the deal status in your CRM the moment Stripe or your bank confirms payment\n\nAutomating the reminder depersonalizes the chase. It feels like standard accounting process rather than a personal confrontation, which means you get paid faster without damaging the relationship.\n\nHow do you track unpaid invoices?",
+  "facebook_caption": "Daily Tech Talk #34\n\nChasing late payments manually takes time and creates awkward client emails.\nAutomated workflows send gentle reminders before the due date and follow up instantly if a payment slips.\nYour cash flow stays consistent without anyone spending Friday afternoon playing debt collector.\n\nHow do you track unpaid invoices? 👇\n\n#Automation #SmallBusiness #WorkflowAutomation #Operations #Zephanto",
+  "x_post": "Chasing unpaid invoices by hand is awkward and wastes time.\n\nAutomated reminders follow up before and after the due date, keeping cash flow steady without manual emails.\n\nHow do you track unpaid invoices? 👇\n\n#Automation #SmallBusiness",
+  "day": 34,
+  "format": "before_after",
+  "date": "2026-11-20",
+  "topic": "Automatic invoice and payment reminders",
+  "image": "images/2026-11-20.jpg",
+  "image_x": "images/2026-11-20-x.jpg",
+  "posted": {},
+  "headline": "Before / After: Unpaid invoice. Two ways to get settled."
+}
