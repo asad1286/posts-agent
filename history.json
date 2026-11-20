@@ -261,5 +261,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-20",
+    "day": 34,
+    "format": "before_after",
+    "headline": "Before / After: Unpaid invoice. Two ways to get settled.",
+    "topic": "Automatic invoice and payment reminders",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
