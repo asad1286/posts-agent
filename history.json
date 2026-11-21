@@ -274,5 +274,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-21",
+    "day": 35,
+    "format": "quote",
+    "headline": "Quote: Zapier is for speed, Make is for scale, n8n is for control when data gets heavy.",
+    "topic": "Choosing between Zapier, Make and n8n",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
