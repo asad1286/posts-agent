@@ -287,5 +287,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-22",
+    "day": 36,
+    "format": "myth_fact",
+    "headline": "Myth vs Fact: Automating new-client onboarding requires months of custom coding.",
+    "topic": "Automating new-client onboarding",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
