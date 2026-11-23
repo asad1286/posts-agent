@@ -300,5 +300,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-23",
+    "day": 37,
+    "format": "before_after",
+    "headline": "Before / After: Server crash. Two ways to recover your data.",
+    "topic": "Backups and disaster recovery for small teams",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
