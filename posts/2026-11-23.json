@@ -1,0 +1,29 @@
+{
+  "headline_top": "Server crash.",
+  "headline_bottom": "Two ways to recover your data.",
+  "before": [
+    "1. Panic when the system goes offline",
+    "2. Search for old backups on a hard drive",
+    "3. Realize the last save was weeks ago",
+    "4. Lose days of client work and revenue"
+  ],
+  "after": [
+    "1. Automated daily snapshots run quietly",
+    "2. Server failure triggers an instant alert",
+    "3. One-click restore brings systems back",
+    "4. Zero data loss and zero client downtime"
+  ],
+  "question": "When was your last successful data restore test?",
+  "instagram_caption": "Daily Tech Talk #37: Before / After\n\nServer crash.\nTwo ways to recover your data.\n\nDisaster recovery isn't just about making backups; it's about how fast you can actually use them when something goes wrong. A recovery plan that takes days to test is no plan at all.\n\nWhen was your last successful data restore test? Tell us in the comments 👇\n\n#Zephanto #DailyTechTalk #DisasterRecovery #CloudHosting #DevOps #SmallBusiness #TechOperations #DataSecurity",
+  "linkedin_post": "A server crash doesn't have to turn into a company-wide emergency.\n\nToo many small teams assume their cloud provider handles backups completely. Often, automated snapshots exist, but nobody has ever tested restoring from them.\n\nHere is the difference between hoping for the best and being prepared:\n\n→ Manual backups mean searching through old drives, guessing which file is current, and losing hours of work.\n→ Automated disaster recovery means daily offsite snapshots, clear documentation, and a restore process tested every quarter.\n\nGood infrastructure isn't just about keeping things running. It's about how quickly you bounce back when they stop.\n\nWhen was your last successful data restore test?\n\n#DisasterRecovery #Cloud #DevOps #Operations",
+  "facebook_caption": "Daily Tech Talk #37: Before / After\n\nServer crash. Two very different outcomes for your data depending on your backup routine.\n\nSet up automated backups before you need them, not after.\n\nWhen was your last successful data restore test? 👇\n\n#DisasterRecovery #Cloud #DevOps #SmallBusiness #Zephanto",
+  "x_post": "Server crash: manual backups mean guessing files and losing hours of work. Automated disaster recovery means daily snapshots and a one-click restore.\n\nWhen was your last successful data restore test?\n\n#DisasterRecovery #DevOps",
+  "day": 37,
+  "format": "before_after",
+  "date": "2026-11-23",
+  "topic": "Backups and disaster recovery for small teams",
+  "image": "images/2026-11-23.jpg",
+  "image_x": "images/2026-11-23-x.jpg",
+  "posted": {},
+  "headline": "Before / After: Server crash. Two ways to recover your data."
+}
