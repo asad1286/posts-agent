@@ -326,5 +326,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-25",
+    "day": 39,
+    "format": "myth_fact",
+    "headline": "Myth vs Fact: HubSpot lead scoring is a set-and-forget feature.",
+    "topic": "Lead scoring in HubSpot",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
