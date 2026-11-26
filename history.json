@@ -339,5 +339,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-26",
+    "day": 40,
+    "format": "before_after",
+    "headline": "Before / After: No-shows. Two ways to run your schedule.",
+    "topic": "Appointment reminders that cut no-shows",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
