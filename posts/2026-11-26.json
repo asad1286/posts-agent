@@ -1,0 +1,29 @@
+{
+  "headline_top": "No-shows.",
+  "headline_bottom": "Two ways to run your schedule.",
+  "before": [
+    "1. Client books a meeting online",
+    "2. No reminder sent before the day",
+    "3. Client forgets and misses the slot",
+    "4. Empty calendar and wasted time"
+  ],
+  "after": [
+    "1. Client books a meeting online",
+    "2. SMS reminder sent 24 hours prior",
+    "3. Quick text confirmation requested",
+    "4. Confirmed slot and zero wasted time"
+  ],
+  "question": "How do you currently handle appointment reminders?",
+  "instagram_caption": "Daily Tech Talk #40: Before / After\n\nAppointment reminders that cut no-shows.\n\nRunning a calendar without automated reminders means playing guess-and-hope with your time. A simple text or email ping the day before changes everything.\n\nFree 30-minute CRM & automation audit, link in bio.\n\nHow do you currently handle appointment reminders? Tell us in the comments 👇\n\n#Zephanto #DailyTechTalk #Automation #Scheduling #SmallBusiness #CRM #Workflows #Productivity #Operations",
+  "linkedin_post": "\"We wasted two hours waiting for a client who forgot.\"\n\nI hear this from founders and operations leads all the time.\n\nWhen appointment confirmation relies entirely on memory, no-shows are guaranteed to happen. But when a calendar is connected to automated messaging, the drop-off disappears.\n\nThe difference is a 24-hour SMS reminder with a quick one-tap confirmation link. No manual emails. No chasing.\n\nSetup takes an hour. The saved time lasts all year.\n\nHow do you currently handle appointment reminders?\n\n#Scheduling #Automation #Operations #SmallBusiness",
+  "facebook_caption": "Daily Tech Talk #40: Before / After\n\nAppointment reminders that cut no-shows.\n\nManual follow-ups lead to forgotten meetings. Automated reminders keep your calendar full and predictable.\n\nHow do you currently handle appointment reminders? 👇\n\n#Scheduling #Automation #Operations #SmallBusiness #Zephanto",
+  "x_post": "Running a calendar without automated reminders means playing guess-and-hope with your time.\n\nAn automated SMS ping 24 hours prior cuts no-shows instantly.\n\nHow do you currently handle appointment reminders?\n\n#Automation #Scheduling",
+  "day": 40,
+  "format": "before_after",
+  "date": "2026-11-26",
+  "topic": "Appointment reminders that cut no-shows",
+  "image": "images/2026-11-26.jpg",
+  "image_x": "images/2026-11-26-x.jpg",
+  "posted": {},
+  "headline": "Before / After: No-shows. Two ways to run your schedule."
+}
