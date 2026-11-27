@@ -352,5 +352,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-27",
+    "day": 41,
+    "format": "quote",
+    "headline": "Quote: Migrating a CRM without cleaning your data is just moving your mess to a nicer address.",
+    "topic": "Cleaning data before a CRM migration",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
