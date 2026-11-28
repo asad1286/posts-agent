@@ -365,5 +365,18 @@
       "linkedin"
     ],
     "ok": false
+  },
+  {
+    "date": "2026-11-28",
+    "day": 42,
+    "format": "myth_fact",
+    "headline": "Myth vs Fact: AI summaries replace listening to sales calls",
+    "topic": "AI summaries of sales calls",
+    "posted": [
+      "facebook",
+      "instagram",
+      "linkedin"
+    ],
+    "ok": false
   }
 ]
